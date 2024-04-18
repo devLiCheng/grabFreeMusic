@@ -1,0 +1,24 @@
+1. 将所有歌曲信息收集起来，收集起来的格式为
+const musicList = [
+    {
+        singer: '刘德华',
+        singer_title: '爱你一万年',
+        tags: ['华语', 'live'， '经典'],
+        lyric: '', // 歌词
+        cover: "https://y.gtimg.cn/music/photo_new/T002R300x300M000004DeBIU2GvyzZ.jpg",
+        download_source:[
+            {
+                des: '来自百度网盘',
+                key: 'baidu',
+                link: '',
+                extract_code:''
+            },
+            {
+                des: "来自lanzoui",
+                key: 'lanzoui',
+                link: '',
+                extract_code:''
+            }
+        ]
+    }
+]
