@@ -10,13 +10,13 @@ const getJsonFiles = require("./getJsonFiles")
 const main = async () => {
   // Launch the browser and open a new blank page
   const browser = await puppeteer.launch({
-    headless: false, // 设置为false以显示浏览器界面  
+    headless: true, // 设置为false以显示浏览器界面  
     devtools: true,  // 打开开发者工具，可选  
     slowMo: 0,     // 减缓Puppeteer的操作速度，便于观察，可选
   });
   const page = await browser.newPage();
 
-  // const signer_links = await signer_search({page, keywords: '冷漠'}) // 获取所有周杰伦歌曲的详情的链接
+  // const signer_links = await signer_search({page, keywords: '刘德华'}) // 获取所有周杰伦歌曲的详情的链接
   // // 通过 keywords 搜索出所有的结果链接，并遍历每个链接，将结果保存到本地
   // if(Array.isArray(signer_links) && signer_links.length > 0){
   //   for(let i = 0; i < signer_links.length; i++) {
@@ -28,33 +28,36 @@ const main = async () => {
   //   console.log('没有找到相关歌曲')
   // }
 
-  // const jsonFiles = await getJsonFiles() // 获取本地保存的json文件列表
-  // if(Array.isArray(jsonFiles) && jsonFiles.length > 0){
-  //   for(let file of jsonFiles){
-  //     const filename = path.join(__dirname, file);
-  //     const fileContent = fs.readFileSync(filename, 'utf8');
-  //     const jsonData = JSON.parse(fileContent); // 拿到这个文件里面的所有要下载的内容
-  //     if(Array.isArray(jsonData) && jsonData.length > 0){
-  //       jsonData.forEach(async (item) => {
-  //         const params = {
-  //           url: item.lanzoui_pan[0], 
-  //           code: item.lanzoui_pan_code[0], 
-  //           singer_title: item.singer_title[0]
-  //         };
-  //         if(Object.keys(params).every(key => params[key] !== undefined && params[key] !== '')) {
-  //           await lanzoui_download({page, ...params})
-  //         }
-  //       })
-  //     }
-  //   }
-  // }
+  const jsonFiles = await getJsonFiles() // 获取本地保存的json文件列表
+  if(Array.isArray(jsonFiles) && jsonFiles.length > 0){
+    for(let file of jsonFiles){
+      const filename = path.join(__dirname, file);
+      const fileContent = fs.readFileSync(filename, 'utf8');
+      const jsonData = JSON.parse(fileContent); // 拿到这个文件里面的所有要下载的内容
+      if(Array.isArray(jsonData) && jsonData.length > 0){
+        for(let item of jsonData){
+          const u = item.lanzoui_pan[0];
+          const url = (typeof u === "string" && !u.includes('baidu')) ? u : undefined
+          const params = {
+            url: url,
+            code: item.lanzoui_pan_code[0], 
+            singer_title: item.singer_title[0]
+          };
+          if(Object.keys(params).every(key => params[key] !== undefined && params[key] !== '')) {
+            await lanzoui_download({page, ...params}, browser)
+          }
+        }
+        
+      }
+    }
+  }
 
-  const params = {
-              url: 'https://hifini.lanzoum.com/iROSd01f11la', 
-              code: 'c0jf', 
-              singer_title: '我的温柔换来你的冷漠'
-            };
-  await lanzoui_download({page, ...params}, browser)
+  // const params = {
+  //             url: 'https://hifini.lanzoum.com/iROSd01f11la', 
+  //             code: 'c0jf', 
+  //             singer_title: '我的温柔换来你的冷漠'
+  //           };
+  // await lanzoui_download({page, ...params}, browser)
 
 
 

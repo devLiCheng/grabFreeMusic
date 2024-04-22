@@ -45,7 +45,7 @@ const lanzoui_download = async ({ page, url, code, singer_title }, browser) => {
 
   await page.click("#downajax", { visible: true });
 
-  await new Promise((resolve) => setTimeout(resolve, 5000)); // 等待5秒
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // 等待5秒
 
   // 源目录，即你的下载文件夹
   const sourceDir = "C:\\Users\\lc\\Downloads";
@@ -68,7 +68,7 @@ const lanzoui_download = async ({ page, url, code, singer_title }, browser) => {
         if (err) {
           return callback(err);
         } else {
-          console.log("files---->", files);
+          // console.log("files---->", files);
           return callback(null, files);
         }
       });
